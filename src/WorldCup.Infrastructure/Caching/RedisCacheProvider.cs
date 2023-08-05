@@ -5,13 +5,13 @@ using WorldCup.Application.Interfaces.Logging;
 
 namespace WorldCup.Infrastructure.Caching
 {
-    internal class DistributedCacheProvider : ICache
+    internal class RedisCacheProvider : ICache
     {
         private readonly ILogger logger;
         private readonly ConnectionMultiplexer connectionMultiplexer;
         private readonly ShortCircuit<RedisValue> circuit = new ShortCircuit<RedisValue>();
 
-        public DistributedCacheProvider(ILogger logger, string connectionString)
+        public RedisCacheProvider(ILogger logger, string connectionString)
         {
             connectionMultiplexer = ConnectionMultiplexer.Connect(connectionString);
             this.logger = logger;
