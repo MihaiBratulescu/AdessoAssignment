@@ -26,7 +26,7 @@ namespace WorldCup.Infrastructure
 
             services.AddSingleton<MemoryCacheProvider>();
             services.AddSingleton(c =>
-                new DistributedCacheProvider(
+                new RedisCacheProvider(
                     c.GetRequiredService<ILogger>(), "connectionString"));
         }
 
