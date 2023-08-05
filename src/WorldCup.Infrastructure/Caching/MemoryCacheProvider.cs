@@ -12,11 +12,9 @@ namespace WorldCup.Infrastructure.Caching
             this.memoryCache = memoryCache;
         }
 
-        public Task<T?> Get<T>(string key) => ((T?)memoryCache.Get(key)).AsCompletedTask();
-
         public async Task<T?> Get<T>(string key, Func<Task<T?>> fallBack)
         {
-            return await Get<T>(key) ?? await fallBack();
+            return ((T?)memoryCache.Get(key)) ?? await fallBack();
         }
 
         public Task Remove(string key)

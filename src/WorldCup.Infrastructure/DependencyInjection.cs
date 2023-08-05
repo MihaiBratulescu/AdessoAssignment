@@ -14,7 +14,7 @@ namespace WorldCup.Infrastructure
             services.AddMemoryCache();
 
             services.AddSingleton<MemoryCacheProvider>();
-            services.AddSingleton<DistributedCacheProvider>();
+            services.AddSingleton(c => new DistributedCacheProvider("connectionString"));
         }
 
         public static void AddApplicationServices(this IServiceCollection services)

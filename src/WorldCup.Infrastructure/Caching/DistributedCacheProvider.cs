@@ -1,27 +1,52 @@
-﻿using WorldCup.Application.Interfaces.Caching;
+﻿using StackExchange.Redis;
+using System.Text.Json;
+using WorldCup.Application.Interfaces.Caching;
 
 namespace WorldCup.Infrastructure.Caching
 {
     internal class DistributedCacheProvider : ICache
     {
-        public Task<T?> Get<T>(string key)
+        private readonly ConnectionMultiplexer _connectionMultiplexer;
+
+        public DistributedCacheProvider(string connectionString)
         {
-            throw new NotImplementedException();
+            _connectionMultiplexer = ConnectionMultiplexer.Connect(connectionString);
         }
 
-        public Task<T?> Get<T>(string key, Func<Task<T?>> fallBack)
+        public async Task<T?> Get<T>(string key, Func<Task<T?>> fallBack)
         {
-            throw new NotImplementedException();
+            var cachedValue = await Get<T>(key);
+            if (cachedValue != null)
+                return cachedValue;
+
+            var fallBackValue = await fallBack();
+            if (fallBackValue != null)
+                await Set(key, fallBackValue, TimeSpan.FromMinutes(10)); // Set a default fallback expiration time (10 minutes)
+
+            return fallBackValue;
         }
 
-        public Task Remove(string key)
+        public async Task Set<T>(string key, T value, TimeSpan expirationTime)
         {
-            throw new NotImplementedException();
+            var database = _connectionMultiplexer.GetDatabase();
+            await database.StringSetAsync(key, JsonSerializer.Serialize(value), expirationTime);
         }
 
-        public Task Set<T>(string key, T value, TimeSpan expirationTime)
+        public async Task Remove(string key)
         {
-            throw new NotImplementedException();
+            var database = _connectionMultiplexer.GetDatabase();
+            await database.KeyDeleteAsync(key);
+        }
+
+        private async Task<T?> Get<T>(string key)
+        {
+            var database = _connectionMultiplexer.GetDatabase();
+            var value = await database.StringGetAsync(key);
+
+            if (value.HasValue)
+                return JsonSerializer.Deserialize<T>(value);
+
+            return default;
         }
     }
 }
