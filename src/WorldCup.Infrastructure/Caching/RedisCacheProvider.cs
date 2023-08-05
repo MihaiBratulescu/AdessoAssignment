@@ -8,13 +8,14 @@ namespace WorldCup.Infrastructure.Caching
     internal class RedisCacheProvider : ICache
     {
         private readonly ILogger logger;
-        private readonly ConnectionMultiplexer connectionMultiplexer;
+        private readonly string connectionString;
+        private ConnectionMultiplexer connectionMultiplexer;
         private readonly ShortCircuit<RedisValue> circuit = new ShortCircuit<RedisValue>();
 
         public RedisCacheProvider(ILogger logger, string connectionString)
         {
-            connectionMultiplexer = ConnectionMultiplexer.Connect(connectionString);
             this.logger = logger;
+            this.connectionString = connectionString;
         }
 
         public async Task<T?> Get<T>(string key, Func<Task<T?>> fallBack)
@@ -80,6 +81,11 @@ namespace WorldCup.Infrastructure.Caching
 
         private async Task<IDatabase> GetDatabase()
         {
+            if(connectionMultiplexer == null)
+            {
+                connectionMultiplexer = ConnectionMultiplexer.Connect(connectionString);
+            }
+
             var database = connectionMultiplexer.GetDatabase();
             if (database == null)
             {

@@ -8,5 +8,18 @@
 
             return list.ElementAt(randomIndex);
         }
+
+        public static IEnumerable<T> Randomize<T>(this Random random, params T[] items)
+        {
+            var copy = items.ToArray();
+            int count = copy.Length;
+
+            while (count > 0)
+            {
+                int index = random.Next(0, --count);
+                yield return copy[index];
+                copy[index] = copy[count];
+            }
+        }
     }
 }

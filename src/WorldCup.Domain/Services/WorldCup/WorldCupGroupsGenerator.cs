@@ -31,7 +31,7 @@ namespace WorldCup.Domain.Services.WorldCup
                 .GetGroups()
                 .ToDictionary(k => k, _ => new List<FootballTeam>((int)groups));
 
-            var teamsLeft = teams.ToList();
+            var teamsLeft = _random.Randomize(teams).ToList();
 
             while(teamsLeft.Count > 0 )
             {

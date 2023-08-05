@@ -1,4 +1,5 @@
 ﻿using Microsoft.OpenApi.Models;
+using Serilog;
 using WorldCup.Infrastructure;
 
 namespace WorldCup.Presentation.Web
@@ -24,9 +25,9 @@ namespace WorldCup.Presentation.Web
                 });
             });
 
+            services.AddLogger();
             services.AddCaching();
             services.AddHandler();
-            services.AddLogger();
             services.AddDbContext();
             services.AddApplicationServices();
         }
@@ -38,10 +39,14 @@ namespace WorldCup.Presentation.Web
             app.UseHttpsRedirection();
             app.UseRouting();
 
+            //should add an error handler middleware
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
+
+            app.UseSerilogRequestLogging();
         }
 
         private static void DevelopmentSetup(IApplicationBuilder app, IWebHostEnvironment env)

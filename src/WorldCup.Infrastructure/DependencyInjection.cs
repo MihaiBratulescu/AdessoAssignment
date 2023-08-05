@@ -9,6 +9,7 @@ using WorldCup.Application.Interfaces.Repositories.WorldCup;
 using WorldCup.Infrastructure.Caching;
 using WorldCup.Infrastructure.Database;
 using WorldCup.Infrastructure.Database.Context;
+using WorldCup.Infrastructure.Logging;
 using WorldCup.Infrastructure.Repositories;
 
 namespace WorldCup.Infrastructure
@@ -26,6 +27,7 @@ namespace WorldCup.Infrastructure
 
         public static void AddLogger(this IServiceCollection services)
         {
+            services.AddScoped<ILogger, SerilogLogger>();
         }
 
         public static void AddCaching(this IServiceCollection services)
@@ -33,9 +35,9 @@ namespace WorldCup.Infrastructure
             services.AddMemoryCache();
 
             services.AddSingleton<MemoryCacheProvider>();
-            services.AddSingleton(c =>
-                new RedisCacheProvider(
-                    c.GetRequiredService<ILogger>(), "connectionString"));
+            services.AddSingleton(c => new RedisCacheProvider(
+                    c.CreateScope().ServiceProvider.GetRequiredService<ILogger>(),
+                    "connectionString"));
         }
 
         public static void AddDbContext(this IServiceCollection services)
