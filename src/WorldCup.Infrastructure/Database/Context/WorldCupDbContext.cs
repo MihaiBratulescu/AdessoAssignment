@@ -17,7 +17,7 @@ namespace WorldCup.Infrastructure.Database.Context
 
         public WorldCupDbContext(DbContextOptions options) : base(options)
         {
-            Seed();
+            Database.EnsureCreated();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -25,7 +25,11 @@ namespace WorldCup.Infrastructure.Database.Context
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.ApplyConfigurationsFromAssembly(GetType().Assembly);
+            Seed(modelBuilder);
+        }
 
+        private static void Seed(ModelBuilder modelBuilder)
+        {
             modelBuilder.Entity<FootballGroup>()
                 .HasData(Enum
                     .GetValues<FootballGroups>()
@@ -81,12 +85,6 @@ namespace WorldCup.Infrastructure.Database.Context
                     new FootballTeam(32, "Adesso Anvers", 8),
 
                 });
-        }
-
-        private void Seed()
-        {
-            Database.EnsureDeleted();
-            Database.EnsureCreated();
         }
     }
 }
