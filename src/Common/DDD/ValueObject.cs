@@ -28,6 +28,7 @@
             });
         }
 
+        public static bool operator !=(ValueObject a, ValueObject b) => !(a == b);
         public static bool operator ==(ValueObject a, ValueObject b)
         {
             if (a is null && b is null)
@@ -38,6 +39,5 @@
 
             return a.Equals(b);
         }
-        public static bool operator !=(ValueObject a, ValueObject b) => !(a == b);
     }
 }
