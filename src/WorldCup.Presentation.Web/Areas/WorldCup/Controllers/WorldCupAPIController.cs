@@ -4,7 +4,7 @@ using WorldCup.Application.WorldCup.Queries;
 using WorldCup.Domain.AggregateModels.Groups;
 using WorldCup.Presentation.Web.Controllers;
 
-namespace WorldCup.Presentation.Web.Areas.WorldCup.Constrollers
+namespace WorldCup.Presentation.Web.Areas.WorldCup.Controllers
 {
     [Route("api/WorldCup")]
     public class WorldCupAPIController : BaseController
