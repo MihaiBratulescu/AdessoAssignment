@@ -5,11 +5,15 @@
         public string Name { get; }
         public int CountryId { get; }
 
+        #region Constructors
+#pragma warning disable CS8618
         private FootballTeam() { }
+#pragma warning restore CS8618
         public FootballTeam(string name, int countryId)
         {
             Name = name;
             CountryId = countryId;
         }
+        #endregion
     }
 }

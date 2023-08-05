@@ -2,7 +2,7 @@
 {
     public abstract class Entity<TKey> where TKey : notnull
     {
-        public TKey ID { get; private set; }
+        public TKey ID { get; protected set; }
 
 #pragma warning disable CS8618
         protected Entity() { }
