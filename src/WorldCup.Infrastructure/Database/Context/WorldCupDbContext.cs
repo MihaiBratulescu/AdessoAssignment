@@ -11,7 +11,7 @@ namespace WorldCup.Infrastructure.Database.Context
         public DbSet<Country> Countries { get; private set; } = null!;
         public DbSet<FootballTeam> FootballTeams { get; private set; } = null!;
 
-        public DbSet<FootballCup> Cups { get; } = null!;
+        public DbSet<FootballCup> FootballCups { get; } = null!;
         public DbSet<FootballGroup> Groups { get; } = null!;
         public DbSet<FootballCupGroups> CupGroups { get; } = null!;
 
@@ -35,6 +35,7 @@ namespace WorldCup.Infrastructure.Database.Context
 
         private void Seed()
         {
+            //for development only
             Database.EnsureDeleted();
             Database.EnsureCreated();
 

@@ -6,12 +6,14 @@ namespace WorldCup.Domain.AggregateModels.Groups
     {
         public char Name { get; }
 
+        #region Constructors
         private FootballGroup() { }
         public FootballGroup(FootballGroups group)
         {
             ID = group;
             Name = group.GetLetter();
         }
+        #endregion
 
         public static implicit operator char(FootballGroup g) => g.ID.GetLetter();
         public static implicit operator byte(FootballGroup g) => (byte)g.ID;

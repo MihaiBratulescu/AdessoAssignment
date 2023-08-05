@@ -11,10 +11,18 @@
 #pragma warning restore CS8618
         public PersonalName(string name, string surname)
         {
+            if(string.IsNullOrWhiteSpace(name))
+                throw new ArgumentException(nameof(name));
+
+            if (string.IsNullOrWhiteSpace(surname))
+                throw new ArgumentException(nameof(surname));
+
             Name = name;
             Surname = surname;
         }
         #endregion
+
+        public string FullName() => $"{Name} {Surname}";
 
         protected override IEnumerable<object?> GetEqualityComponents()
         {

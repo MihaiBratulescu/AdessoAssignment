@@ -2,10 +2,10 @@
 
 namespace WorldCup.Domain.AggregateModels.Groups
 {
-    public class FootballCupGroups : Entity<int>
+    public class FootballCupGroups
     {
-        public int FootballCoupId { get; }
-        public int FootballTeamId { get; }
-        public FootballGroups FootballGroupId { get; }
+        public int TeamId { get; }
+        public int CoupId { get; }
+        public FootballGroups GroupId { get; }
     }
 }
