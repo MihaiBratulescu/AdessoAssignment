@@ -1,52 +1,94 @@
 ﻿using StackExchange.Redis;
 using System.Text.Json;
 using WorldCup.Application.Interfaces.Caching;
+using WorldCup.Application.Interfaces.Logging;
 
 namespace WorldCup.Infrastructure.Caching
 {
     internal class DistributedCacheProvider : ICache
     {
-        private readonly ConnectionMultiplexer _connectionMultiplexer;
+        private readonly ILogger logger;
+        private readonly ConnectionMultiplexer connectionMultiplexer;
+        private readonly ShortCircuit<RedisValue> circuit = new ShortCircuit<RedisValue>();
 
-        public DistributedCacheProvider(string connectionString)
+        public DistributedCacheProvider(ILogger logger, string connectionString)
         {
-            _connectionMultiplexer = ConnectionMultiplexer.Connect(connectionString);
+            connectionMultiplexer = ConnectionMultiplexer.Connect(connectionString);
+            this.logger = logger;
         }
 
         public async Task<T?> Get<T>(string key, Func<Task<T?>> fallBack)
         {
-            var cachedValue = await Get<T>(key);
-            if (cachedValue != null)
-                return cachedValue;
-
-            var fallBackValue = await fallBack();
-            if (fallBackValue != null)
-                await Set(key, fallBackValue, TimeSpan.FromMinutes(10)); // Set a default fallback expiration time (10 minutes)
-
-            return fallBackValue;
+            return await Get<T>(key) ?? await fallBack();
         }
 
-        public async Task Set<T>(string key, T value, TimeSpan expirationTime)
+        public Task Set<T>(string key, T value, TimeSpan expirationTime)
         {
-            var database = _connectionMultiplexer.GetDatabase();
-            await database.StringSetAsync(key, JsonSerializer.Serialize(value), expirationTime);
+            return UpdateDatabase(database =>
+                database.StringSetAsync(key, JsonSerializer.Serialize(value), expirationTime));
         }
 
-        public async Task Remove(string key)
+        public Task Remove(string key)
         {
-            var database = _connectionMultiplexer.GetDatabase();
-            await database.KeyDeleteAsync(key);
+            return UpdateDatabase(database =>
+                database.KeyDeleteAsync(key));
         }
 
         private async Task<T?> Get<T>(string key)
         {
-            var database = _connectionMultiplexer.GetDatabase();
-            var value = await database.StringGetAsync(key);
+            var value = await RetrieveData(database => database.StringGetAsync(key));
 
             if (value.HasValue)
+#pragma warning disable CS8604
                 return JsonSerializer.Deserialize<T>(value);
+#pragma warning restore CS8604
 
             return default;
+        }
+
+        private async Task UpdateDatabase(Func<IDatabase, Task> update)
+        {
+            try
+            {
+                await circuit.PassCircuit(async () => await update(await GetDatabase()));
+            }
+            catch (Exception e)
+            {
+                circuit.CutCircuit();
+                await logger.LogException(e, "Error accessing Redis.");
+                //send notification
+            }
+        }
+
+        private async Task<RedisValue> RetrieveData(Func<IDatabase, Task<RedisValue>> retrieve)
+        {
+            try
+            {
+                return await circuit.PassCircuit(async () =>
+                        await retrieve(await GetDatabase()),
+                        RedisValue.EmptyString);
+            }
+            catch (Exception e)
+            {
+                circuit.CutCircuit();
+                await logger.LogException(e, "Error accessing Redis.");
+                //send notification
+
+                return RedisValue.EmptyString;
+            }
+        }
+
+        private async Task<IDatabase> GetDatabase()
+        {
+            var database = connectionMultiplexer.GetDatabase();
+            if (database == null)
+            {
+                circuit.CutCircuit();
+                await logger.LogException("Could not access Redis database.");
+                //send notification
+            }
+
+            return database;
         }
     }
 }

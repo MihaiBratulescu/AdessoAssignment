@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using WorldCup.Application.Interfaces.Logging;
 using WorldCup.Application.Interfaces.Repositories.Geo;
 using WorldCup.Infrastructure.Caching;
 using WorldCup.Infrastructure.Database.Context;
@@ -9,18 +10,24 @@ namespace WorldCup.Infrastructure
 {
     public static class DependencyInjection
     {
+        public static void AddApplicationServices(this IServiceCollection services)
+        {
+            services.AddScoped<CountriesRepository>();
+            services.AddScoped<ICountriesRepository, InMemoryCountriesRepository>();
+        }
+
+        public static void AddLogging(this IServiceCollection services)
+        {
+        }
+
         public static void AddCaching(this IServiceCollection services)
         {
             services.AddMemoryCache();
 
             services.AddSingleton<MemoryCacheProvider>();
-            services.AddSingleton(c => new DistributedCacheProvider("connectionString"));
-        }
-
-        public static void AddApplicationServices(this IServiceCollection services)
-        {
-            services.AddScoped<CountriesRepository>();
-            services.AddScoped<ICountriesRepository, InMemoryCountriesRepository>();
+            services.AddSingleton(c =>
+                new DistributedCacheProvider(
+                    c.GetRequiredService<ILogger>(), "connectionString"));
         }
 
         public static IServiceCollection AddDbContext(this IServiceCollection services)
