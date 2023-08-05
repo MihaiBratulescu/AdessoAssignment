@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\WorldCup.Domain\WorldCup.Domain.csproj" />
+    <ProjectReference Include="..\WorldCup.Domain\WorldCup.Domain.csproj" />
   </ItemGroup>
 
 </Project>

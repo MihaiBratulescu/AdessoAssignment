@@ -12,8 +12,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\WorldCup.Application\WorldCup.Application.csproj" />
-    <ProjectReference Include="..\..\WorldCup.Infrastructure\WorldCup.Infrastructure.csproj" />
+    <ProjectReference Include="..\WorldCup.Application\WorldCup.Application.csproj" />
+    <ProjectReference Include="..\WorldCup.Infrastructure\WorldCup.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
