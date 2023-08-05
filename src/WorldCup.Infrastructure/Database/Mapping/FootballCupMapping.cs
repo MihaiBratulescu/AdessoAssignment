@@ -13,6 +13,7 @@ namespace WorldCup.Infrastructure.Database.Mapping
             builder.ConfigurePersonalName(g => g.Drawer);
 
             builder.Property(c => c.GroupCount).HasConversion<byte>();
+            builder.Property(c => c.Year).IsRequired();
         }
     }
 }

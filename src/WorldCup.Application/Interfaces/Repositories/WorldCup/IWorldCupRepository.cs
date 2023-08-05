@@ -7,6 +7,7 @@ namespace WorldCup.Application.Interfaces.Repositories.WorldCup
         IWriteRepository<FootballCup, int>,
         IReadRepository<FootballCup, int>
     {
+        Task<FootballCup?> GetByYearAsync(int year);
         public Task<FootballTeam[]> GetWorldCupTeamsAsync();
     }
 }

@@ -11,13 +11,13 @@ namespace WorldCup.Infrastructure.Database.Context
         public DbSet<Country> Countries { get; private set; } = null!;
         public DbSet<FootballTeam> FootballTeams { get; private set; } = null!;
 
-        public DbSet<FootballCup> FootballCups { get; } = null!;
-        public DbSet<FootballGroup> Groups { get; } = null!;
-        public DbSet<FootballCupGroups> CupGroups { get; } = null!;
+        public DbSet<FootballCup> FootballCups { get; private set; } = null!;
+        public DbSet<FootballGroup> Groups { get; private set; } = null!;
+        public DbSet<FootballCupGroups> CupGroups { get; private set; } = null!;
 
         public WorldCupDbContext(DbContextOptions options) : base(options)
         {
-            Database.EnsureCreated();
+            Database.EnsureCreated();//for dev
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

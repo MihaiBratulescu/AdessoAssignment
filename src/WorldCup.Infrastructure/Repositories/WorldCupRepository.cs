@@ -12,6 +12,15 @@ namespace WorldCup.Infrastructure.Repositories
         {
         }
 
+        public Task<FootballCup?> GetByYearAsync(int year)
+        {
+            return context.FootballCups
+                .AsNoTracking()
+                .Include(c => c.Groups)
+                .Where(c => c.Year == year)
+                .SingleOrDefaultAsync();
+        }
+
         public Task<FootballTeam[]> GetWorldCupTeamsAsync()
         {
             return context.FootballTeams

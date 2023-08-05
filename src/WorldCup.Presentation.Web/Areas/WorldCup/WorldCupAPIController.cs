@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WorldCup.Application.WorldCup.Commands;
+using WorldCup.Application.WorldCup.Queries;
+using WorldCup.Domain.AggregateModels.Groups;
 using WorldCup.Presentation.Web.Controllers;
 
 namespace WorldCup.Presentation.Web.Areas.WorldCup
@@ -18,9 +20,11 @@ namespace WorldCup.Presentation.Web.Areas.WorldCup
         }
 
         [HttpGet("cup/{year}")]
-        public Task GetCup([FromRoute] int year)
+        public async Task<FootballCup?> GetCup([FromRoute] int year)
         {
-            return Task.CompletedTask;
+            var res = await handler.SendAsync(new GetWorldCupQuery { Year = year });
+
+            return res;
         }
 
     }
