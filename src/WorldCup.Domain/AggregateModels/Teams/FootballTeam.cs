@@ -14,6 +14,12 @@
             Name = name;
             CountryId = countryId;
         }
+        public FootballTeam(int id, string name, int countryId)
+        {
+            ID = id;//for seed
+            Name = name;
+            CountryId = countryId;
+        }
         #endregion
     }
 }

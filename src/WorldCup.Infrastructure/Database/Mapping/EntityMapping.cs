@@ -17,7 +17,7 @@ namespace WorldCup.Infrastructure.Database.Mapping
 
             builder.HasKey(e => e.ID);
             builder.Property(e => e.ID)
-                .UseIdentityColumn(seed: 1, increment: 1)
+                .ValueGeneratedOnAdd()
                 .HasColumnName(primaryKeyName);
         }
 
