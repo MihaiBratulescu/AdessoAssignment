@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using WorldCup.Application.Interfaces.Repositories;
 
-namespace WorldCup.Infrastructure.Database.Repositories
+namespace WorldCup.Infrastructure.Repositories
 {
     internal class Repository<TContext, TEntity, TKey> : IReadRepository<TEntity, TKey>, IWriteRepository<TEntity, TKey>
         where TKey : notnull
@@ -29,15 +29,13 @@ namespace WorldCup.Infrastructure.Database.Repositories
         {
             var entity = await FindAsync(id);
 
-            if(entity != null)
+            if (entity != null)
             {
                 Entities().Remove(entity);
             }
         }
 
         public virtual void Remove(TEntity entity) => Entities().Remove(entity);
-
-        public Task<int> SaveChangesAsync() => context.SaveChangesAsync();
 
         protected DbSet<TEntity> Entities() => context.Set<TEntity>();
 

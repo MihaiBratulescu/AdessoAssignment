@@ -20,4 +20,8 @@
     <ProjectReference Include="..\WorldCup.Application\WorldCup.Application.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Database\Mapping\" />
+  </ItemGroup>
+
 </Project>

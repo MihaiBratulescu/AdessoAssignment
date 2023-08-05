@@ -1,10 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using WorldCup.Domain.AggregateModels.Geo;
 
 namespace WorldCup.Infrastructure.Database.Context
 {
     internal class WorldCupDbContext : DbContext
     {
-        protected WorldCupDbContext(DbContextOptions options) : base(options)
+        public DbSet<Country> Countries { get; private set; } = null!;
+
+        public WorldCupDbContext(DbContextOptions options) : base(options)
         {
         }
 

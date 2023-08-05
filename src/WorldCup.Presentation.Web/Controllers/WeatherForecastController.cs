@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using WorldCup.Application.Interfaces.Repositories.Geo;
 
 namespace WorldCup.Presentation.Web.Controllers
 {
@@ -7,15 +8,18 @@ namespace WorldCup.Presentation.Web.Controllers
     public class WeatherForecastController : ControllerBase
     {
         private readonly ILogger<WeatherForecastController> _logger;
+        private readonly ICountriesRepository repo;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+        public WeatherForecastController(ICountriesRepository repo)
         {
-            _logger = logger;
+            this.repo = repo;
         }
 
         [HttpGet(Name = "GetWeatherForecast")]
-        public IEnumerable<object> Get()
+        public async Task<object> Get()
         {
+            await repo.GetAllAsync();
+
             return Enumerable.Range(1, 5)
                 .Select(index => new object())
                 .ToArray();
