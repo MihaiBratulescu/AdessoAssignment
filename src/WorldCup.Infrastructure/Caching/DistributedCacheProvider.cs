@@ -9,7 +9,7 @@ namespace WorldCup.Infrastructure.Caching
             throw new NotImplementedException();
         }
 
-        public Task<T?> Get<T>(string key, Func<Task<T?>> fallback)
+        public Task<T?> Get<T>(string key, Func<Task<T?>> fallBack)
         {
             throw new NotImplementedException();
         }

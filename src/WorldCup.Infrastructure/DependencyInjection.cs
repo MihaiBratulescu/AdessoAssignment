@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using WorldCup.Application.Interfaces.Caching;
 using WorldCup.Application.Interfaces.Repositories.Geo;
 using WorldCup.Infrastructure.Caching;
 using WorldCup.Infrastructure.Database.Context;

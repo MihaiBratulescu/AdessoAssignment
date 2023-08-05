@@ -14,9 +14,9 @@ namespace WorldCup.Infrastructure.Caching
 
         public Task<T?> Get<T>(string key) => ((T?)memoryCache.Get(key)).AsCompletedTask();
 
-        public async Task<T?> Get<T>(string key, Func<Task<T?>> fallback)
+        public async Task<T?> Get<T>(string key, Func<Task<T?>> fallBack)
         {
-            return await Get<T>(key) ?? await fallback();
+            return await Get<T>(key) ?? await fallBack();
         }
 
         public Task Remove(string key)
