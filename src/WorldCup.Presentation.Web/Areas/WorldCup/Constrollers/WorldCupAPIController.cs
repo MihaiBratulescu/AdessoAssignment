@@ -4,7 +4,7 @@ using WorldCup.Application.WorldCup.Queries;
 using WorldCup.Domain.AggregateModels.Groups;
 using WorldCup.Presentation.Web.Controllers;
 
-namespace WorldCup.Presentation.Web.Areas.WorldCup
+namespace WorldCup.Presentation.Web.Areas.WorldCup.Constrollers
 {
     [Route("api/WorldCup")]
     public class WorldCupAPIController : BaseController
@@ -22,9 +22,10 @@ namespace WorldCup.Presentation.Web.Areas.WorldCup
         [HttpGet("cup/{year}")]
         public async Task<FootballCup?> GetCup([FromRoute] int year)
         {
-            var res = await handler.SendAsync(new GetWorldCupQuery { Year = year });
+            var cup = await handler.SendAsync(new GetWorldCupQuery { Year = year });
 
-            return res;
+            //don't expose entity, convert to DTO
+            return cup;
         }
 
     }
