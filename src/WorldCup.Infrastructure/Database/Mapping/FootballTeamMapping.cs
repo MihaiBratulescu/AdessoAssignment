@@ -16,6 +16,7 @@ namespace WorldCup.Infrastructure.Database.Mapping
             builder.HasOne<Country>()
                 .WithMany()
                 .IsRequired()
+                .HasForeignKey(t => t.CountryId)
                 .OnDelete(DeleteBehavior.Restrict);
         }
     }

@@ -3,8 +3,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using System.Reflection;
 using WorldCup.Application.Interfaces.Logging;
+using WorldCup.Application.Interfaces.Repositories;
 using WorldCup.Application.Interfaces.Repositories.Geo;
+using WorldCup.Application.Interfaces.Repositories.WorldCup;
 using WorldCup.Infrastructure.Caching;
+using WorldCup.Infrastructure.Database;
 using WorldCup.Infrastructure.Database.Context;
 using WorldCup.Infrastructure.Repositories;
 
@@ -16,6 +19,9 @@ namespace WorldCup.Infrastructure
         {
             services.AddScoped<CountriesRepository>();
             services.AddScoped<ICountriesRepository, InMemoryCountriesRepository>();
+
+            services.AddScoped<IWorldCupRepository, WorldCupRepository>();
+            services.AddScoped<ITeamsRepository, TeamsRepository>();
         }
 
         public static void AddLogger(this IServiceCollection services)
@@ -32,7 +38,7 @@ namespace WorldCup.Infrastructure
                     c.GetRequiredService<ILogger>(), "connectionString"));
         }
 
-        public static IServiceCollection AddDbContext(this IServiceCollection services)
+        public static void AddDbContext(this IServiceCollection services)
         {
             services.AddDbContext<WorldCupDbContext>(options =>
             {
@@ -42,7 +48,7 @@ namespace WorldCup.Infrastructure
                     "TrustServerCertificate=True;");
             });
 
-            return services;
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
         }
 
         #region CQRS

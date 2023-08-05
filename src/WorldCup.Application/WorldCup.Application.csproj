@@ -15,7 +15,7 @@
   </ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="WorldCup\" />
+	  <Folder Include="WorldCup\Queries\" />
 	</ItemGroup>
 
 </Project>

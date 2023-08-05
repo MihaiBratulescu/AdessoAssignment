@@ -13,5 +13,13 @@ namespace WorldCup.Domain.AggregateModels.Groups
 
         public FootballGroups GroupId { get; }
         public FootballGroup? Group { get; }
+
+        private FootballCupGroups() { }
+        public FootballCupGroups(FootballTeam team, FootballCup cup, FootballGroups group)
+        {
+            Team = team;
+            Cup = cup;
+            GroupId = group;
+        }
     }
 }
