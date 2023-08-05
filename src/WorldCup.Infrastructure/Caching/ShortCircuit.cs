@@ -2,11 +2,24 @@
 {
     internal class ShortCircuit<T>
     {
+        private object _lock = new object();
         private bool isShorted = false;
 
         public void CutCircuit()
         {
-            isShorted = true;
+            lock(_lock)
+            {
+                if(!isShorted)
+                {
+                    isShorted = true;
+
+                    Task.Run(() =>
+                    {
+                        Thread.Sleep(TimeSpan.FromMinutes(10));
+                        isShorted = false;
+                    });
+                }
+            }
         }
 
         public async Task PassCircuit(Func<Task> action)

@@ -20,7 +20,7 @@ namespace WorldCup.Infrastructure.Repositories
         {
             return context.Countries
                 .AsNoTracking()
-                .FirstOrDefaultAsync(c => c.Code == code);
+                .FirstOrDefaultAsync(c => c.ISOCode == code);
         }
     }
 }

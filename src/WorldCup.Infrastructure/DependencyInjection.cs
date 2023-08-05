@@ -16,7 +16,7 @@ namespace WorldCup.Infrastructure
             services.AddScoped<ICountriesRepository, InMemoryCountriesRepository>();
         }
 
-        public static void AddLogging(this IServiceCollection services)
+        public static void AddLogger(this IServiceCollection services)
         {
         }
 

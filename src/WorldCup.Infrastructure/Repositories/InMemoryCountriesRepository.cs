@@ -55,8 +55,6 @@ namespace WorldCup.Infrastructure.Repositories
 
                 return countries;
             });
-
-
         }
 
         #region Disposable

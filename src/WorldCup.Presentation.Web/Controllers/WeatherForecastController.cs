@@ -18,11 +18,9 @@ namespace WorldCup.Presentation.Web.Controllers
         [HttpGet(Name = "GetWeatherForecast")]
         public async Task<object> Get()
         {
-            await repo.GetAllAsync();
+            var data =  await repo.GetAllAsync();
 
-            return Enumerable.Range(1, 5)
-                .Select(index => new object())
-                .ToArray();
+            return data;
         }
     }
 }
