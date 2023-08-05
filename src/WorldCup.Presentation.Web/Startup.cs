@@ -25,6 +25,7 @@ namespace WorldCup.Presentation.Web
             });
 
             services.AddCaching();
+            services.AddHandler();
             services.AddLogger();
             services.AddDbContext();
             services.AddApplicationServices();

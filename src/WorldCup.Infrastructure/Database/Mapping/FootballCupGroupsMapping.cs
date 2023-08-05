@@ -13,17 +13,21 @@ namespace WorldCup.Infrastructure.Database.Mapping
             builder.HasKey(j => new { j.CoupId, j.GroupId, j.TeamId });
             builder.HasIndex(x => new { x.CoupId, x.TeamId }).IsUnique();
 
-            builder.HasOne<FootballCup>()
+            builder.HasOne(x => x.Cup)
                 .WithMany()
                 .HasForeignKey(x => x.CoupId);
 
-            builder.HasOne<FootballGroup>()
+            builder.HasOne(x => x.Group)
                 .WithMany()
                 .HasForeignKey(x => x.GroupId);
 
-            builder.HasOne<FootballTeam>()
+            builder.HasOne(x => x.Team)
                 .WithMany()
                 .HasForeignKey(x => x.TeamId);
+
+            builder.Navigation(s => s.Cup).AutoInclude();
+            builder.Navigation(s => s.Group).AutoInclude();
+            builder.Navigation(s => s.Team).AutoInclude();
         }
     }
 }
